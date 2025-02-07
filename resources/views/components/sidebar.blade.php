@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Sidebar</title>
+    <!-- <title>Sidebar</title> -->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -27,6 +27,8 @@
         }
 
         .sidebar .logo {
+            margin-top: 10px;
+            margin-bottom: 50px;
             font-size: 22px;
             font-weight: bold;
             color: #72B5F6;
@@ -34,6 +36,7 @@
 
         .sidebar .menu-item {
             padding: 10px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -118,7 +121,6 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="logo">Vibe<span style="color:blueviolet;">Four</span></div>
-        <hr>
 
         <a href="#" class="menu-item active"><i class="bi bi-house-door"></i> Beranda</a>
 
@@ -135,9 +137,11 @@
 
         <div onclick="dropdownPenjadwalan()" class="menu-item">
             <i class="bi bi-calendar-event"></i> Penjadwalan
+            <div class="arrow">
+                <i class="bi bi-chevron-down" id="arrow_menu"></i>
+            </div>
         </div>
 
-        <hr>
         <a href="/logout" class="menu-item"><i class="bi bi-box-arrow-right"></i> Keluar Akun</a>
     </div>
 
@@ -145,11 +149,8 @@
         {{-- <div class="navbar"> --}}
         <i class="bi bi-list toggle-btn" id="toggleSidebar"></i>
         {{-- </div> --}}
-
-        <div class="container mt-4">
-
+        <div class="container ">
             @yield('content')
-
         </div>
     </div>
 
