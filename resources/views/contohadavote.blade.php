@@ -121,8 +121,18 @@
         </div>
         <div class="line"></div>
 
-        <div class="text">
-            <p>Belum ada vote</p>
+        <div class="vote">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vote 1</h5>
+                </div>
+                <div class="card_footer d-flex justify-content-end m-2">
+                    <button type="button" class="share btn btn-primary fw-bold m-1" style="color: #000000"><i
+                            class="bi bi-share-fill m-1" style="color: #000000"></i>
+                        Bagikan
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </body>

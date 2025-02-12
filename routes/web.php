@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', function () {
     return view('components.sidebar');
 });
@@ -26,4 +22,8 @@ Route::get('/vote', function () {
 
 Route::get('/tambahvote', function () {
     return view('tambahvote');
+});
+
+Route::get('/contoh', function () {
+    return view('contohadavote');
 });

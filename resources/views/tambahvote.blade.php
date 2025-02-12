@@ -1,4 +1,26 @@
 @include('components.sidebar')
+@include('components.uploadFotoModal')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".menu-item[data-bs-toggle='collapse']").forEach(function(item) {
+            let arrow = item.querySelector(".rotate");
+            let targetId = item.getAttribute("href");
+            let target = document.querySelector(targetId);
+
+            if (target) {
+                target.addEventListener("show.bs.collapse", function() {
+                    arrow.classList.add("open");
+                });
+
+                target.addEventListener("hide.bs.collapse", function() {
+                    arrow.classList.remove("open");
+                });
+            }
+        });
+    });
+</script>
+
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -15,6 +37,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Poppins';
+
         }
 
         .line {
@@ -58,24 +81,8 @@
 </head>
 
 <body>
-
-    <!-- <div class="card" style="max-width: 1580px; margin-left: auto; margin-right: 40px;">
-        <div class=" d-flex justify-content-between align-items-center" style="margin-top: auto; ">
-            <h5 class="mb-0">Vote Anda</h5>
-            <button class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-sliders"></i> Filter
-            </button>
-        </div>
-        <hr>
-        <div class="card-body" style="min-height: 300px;">
-        </div>
-    </div>
-    <div class="text-end mt-2">
-        <button class="btn btn-primary btn-sm">Buat Vote +</button>
-    </div> -->
-
     <div class="content">
-        <div class="header">
+        <div class="header" style="margin-top: 5%;">
             <h3>Tambah Vote</h3>
         </div>
         <div class="line"></div>
@@ -83,6 +90,9 @@
 
         <div class="container mt-4">
             <div class="card p-4">
+                <h4>apa</h4>
+                <hr style="height: 2px; background-color: black; width: 100%; margin: 20px 0;">
+                
                 <h5>Judul</h5>
                 <input type="text" class="form-control mb-3" placeholder="">
 
@@ -91,93 +101,140 @@
 
             </div>
 
-            <div class="card p-4 mt-3">
-                <h5>Pertanyaan</h5>
-                <input type="text" class="form-control mb-3" placeholder="">
-
-                <h5>Pilihan</h5>
-                <div class="form-check form-switch mb-2">
-                    <label class="form-check-label" for="multiChoice">Izinkan Pilih Banyak Jawaban</label>
-                    <input class="form-check-input" type="checkbox" id="multiChoice">
-                </div>
-
-                <div class="row mb-2 align-items-center">
-                    <div class="col">
-                        <input type="text" class="form-control" value="">
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-outline-danger">X</button>
-                    </div>
-                    <div class="col-auto">
-                        <div class="d-flex align-items-center">
-                            <label for="uploadImage2" class="btn btn-primary d-flex align-items-center">
-                                <i class="bi bi-image me-2"></i>
-                                Tambah Gambar
-                            </label>
-                            <input type="file" id="uploadImage2" class="d-none">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-2 align-items-center">
-                    <div class="col">
-                        <input type="text" class="form-control" value="">
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-outline-danger">X</button>
-                    </div>
-                    <div class="col-auto">
-                        <div class="d-flex align-items-center">
-                            <label for="uploadImage2" class="btn btn-primary d-flex align-items-center">
-                                <i class="bi bi-image me-2"></i>
-                                Tambah Gambar
-                            </label>
-                            <input type="file" id="uploadImage2" class="d-none">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-start ">
-                    <button class="btn btn-link " style="text-decoration: none;">Tambah Pilihan +</button>
-                </div>
-
-                <div class="text-end">
-                    <button class="btn btn-primary">+ Tambah Pertanyaan</button>
-                </div>
+            <div id="questionContainer">
             </div>
 
-            <div class="card p-4 mt-3">
-                <!-- <div class="form-check form-switch mb-2">
-                    <input class="form-check-input" type="checkbox" id="protectVote">
-                    <label class="form-check-label" for="protectVote">Lindungi voting dengan kode</label>
-                </div>
-                <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="includeName">
-                    <label class="form-check-label" for="includeName">Sertakan nama untuk mengisi</label>
-                </div>
+            <div class="text-end mt-3">
+                <button class="btn btn-primary" id="addQuestionBtn">
+                    <i class="bi bi-plus"></i>
+                    Tambah Pertanyaan</button>
+            </div>
 
-                <label class="form-label">Tutup vote pada</label>
-                <input type="datetime-local" class="form-control mb-3">
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const questionContainer = document.getElementById("questionContainer");
+                    const addQuestionBtn = document.getElementById("addQuestionBtn");
 
-                <label class="form-label">Tampilan hasil vote</label>
-                <select class="form-select mb-3">
-                    <option>Private</option>
-                    <option>Publik</option>
-                </select> -->
+                    function createQuestionCard() {
+                        const questionIndex = document.querySelectorAll('.card-question');
+                        const card = document.createElement("div");
+                        card.classList.add("card", "p-4", "mt-3", "position-relative", "card-question");
 
-                <div class="row">
-                    <div class="col-md-6">
+                        card.innerHTML = `
+                        <button class="btn-close position-absolute top-0 end-0 m-2 d-none delete-question-btn"></button>
+
+                        <h4>apa</h4>
+                <hr style="height: 2px; background-color: black; width: 100%; margin: 20px 0;">
+                        <h5>Pertanyaan </h5>
+                        <textarea class="form-control mb-3" rows="3" placeholder="Masukkan pertanyaan"></textarea>
+
+                        <h5>Pilihan</h5>
                         <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="protectVote">
+                            <label class="form-check-label" for="multiChoice${questionIndex}">Izinkan Pilih Banyak Jawaban</label>
+                            <input class="form-check-input" type="checkbox" id="multiChoice${questionIndex}">
+                        </div>
+
+                        <div class="choices">
+                            ${createChoiceElement()}
+                            ${createChoiceElement()}
+                        </div>
+
+                        <div class="text-start">
+                            <button class="btn btn-link add-choice-btn" style="text-decoration: none;">Tambah Pilihan +</button>
+                        </div>
+                    `;
+
+                        questionContainer.appendChild(card);
+
+                        card.querySelector(".add-choice-btn").addEventListener("click", function(e) {
+                            e.preventDefault();
+                            card.querySelector(".choices").insertAdjacentHTML("beforeend", createChoiceElement());
+                        });
+
+                        updateDeleteButtons();
+                    }
+
+                    function createChoiceElement() {
+                        return `
+                        <div class="row mb-2 align-items-center">
+                            <div class="col">
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-auto">
+                            <button class="btn btn-outline-danger remove-choice-btn">
+                            <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                            <div class="col-auto">
+                                <label class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#uploadFotoModal">
+                                    <i class="bi bi-image me-2"></i>
+                                    Tambah Gambar
+                                </label>
+                            </div>
+                        </div>
+                    `;
+                    }
+
+                    function updateDeleteButtons() {
+                        const questionCards = document.querySelectorAll(".card-question");
+                        questionCards.forEach((card, index) => {
+                            const deleteBtn = card.querySelector(".delete-question-btn");
+                            if (questionCards.length > 1) {
+                                deleteBtn.classList.remove("d-none");
+                            } else {
+                                deleteBtn.classList.add("d-none");
+                            }
+                        });
+                    }
+
+                    addQuestionBtn.addEventListener("click", function() {
+                        createQuestionCard();
+                    });
+
+                    questionContainer.addEventListener("click", function(e) {
+                        if (e.target.classList.contains("remove-choice-btn")) {
+                            if (a) {
+
+                            }
+                            e.target.closest(".row").remove();
+                        }
+                    });
+
+                    questionContainer.addEventListener("click", function(e) {
+                        if (e.target.classList.contains("delete-question-btn")) {
+                            e.target.closest(".card-question").remove();
+                            updateDeleteButtons();
+                        }
+                    });
+
+                    createQuestionCard();
+                });
+            </script>
+
+
+            <div class="card p-4 mt-3">
+                <h4>apa</h4>
+                <hr style="height: 2px; background-color: black; width: 100%; margin: 20px 0;">
+                <div class="row ">
+                    <div class="col-md-4 ">
+                        <div class="form-check form-switch mb-2">
                             <label class="form-check-label" for="protectVote">Lindungi voting dengan kode</label>
                         </div>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="includeName">
                             <label class="form-check-label" for="includeName">Sertakan nama untuk mengisi</label>
                         </div>
                     </div>
 
-                    <div class="col-auto d-flex align-items-center">
+                    <div class="col-sm">
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="protectVote">
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="includeName">
+                        </div>
+                    </div>
+
+                    <div class="col-sm d-flex align-items-center">
                         <div class="vr h-100"></div>
                     </div>
 
@@ -197,10 +254,9 @@
                 </div>
             </div>
             <div class="text-end">
-                <button class="btn btn-primary" style="margin-top: 10px; width:200px;">Simpan</button>
+                <button class="btn btn-success" style="margin-top: 10px; width:200px;">Simpan</button>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </div>
 </body>
 

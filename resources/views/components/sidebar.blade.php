@@ -4,14 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- <title>Sidebar</title> -->
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/grup.css') }}">
-
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
         body {
             background-color: #f8f9fa;
         }
@@ -34,7 +31,7 @@
             color: #72B5F6;
         }
 
-        .sidebar .menu-item {
+        .menu-item {
             padding: 10px;
             margin-top: 10px;
             display: flex;
@@ -47,20 +44,17 @@
             cursor: pointer;
         }
 
-        .sidebar .menu-sub-item {
+        .menu-sub-item {
             padding: 10px;
-            display: flex;
-            align-items: center;
+            display: block;
             margin-left: 30px;
-            gap: 10px;
             color: #333;
             text-decoration: none;
-            border-radius: 5px;
             transition: 0.3s;
         }
 
-        .menu-item i {
-            font-size: 18px;
+        .rotate.open {
+            transform: rotate(180deg);
         }
 
         .content {
@@ -69,39 +63,9 @@
             transition: 0.3s;
         }
 
-        .navbar {
-            background: white;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
         .toggle-btn {
             font-size: 24px;
             cursor: pointer;
-        }
-
-        .sidebar-hidden {
-            margin-left: -250px;
-        }
-
-        .arrow {
-            margin-left: auto;
-        }
-
-        .content-expanded {
-            margin-left: 0 !important;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .rotate-180 {
-            transform: rotate(180deg);
-            transition: transform 0.3s ease;
         }
 
         @media (max-width: 768px) {
@@ -117,55 +81,57 @@
 </head>
 
 <body>
-
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="logo">Vibe<span style="color:blueviolet;">Four</span></div>
 
-        <a href="#" class="menu-item active"><i class="bi bi-house-door"></i> Beranda</a>
+        <a href="#" class="menu-item"><i class="bi bi-house-door"></i> Beranda</a>
 
-        <div onclick="dropdownVote()" class="menu-item ">
+        <a class="menu-item" data-bs-toggle="collapse" href="#menu_vote" role="button" aria-expanded="false"
+            data-target="#menu_vote">
             <i class="bi bi-check-circle"></i> Voting
-            <div class="arrow">
-                <i class="bi bi-chevron-down" id="arrow_menu"></i>
-            </div>
-        </div>
-
-        <div id="menu_vote" class="hidden">
+            <i class="bi bi-chevron-down ms-auto rotate" id="arrow_vote"></i>
+        </a>
+        <div class="collapse" id="menu_vote">
             <a href="/vote" class="menu-sub-item">Vote Saya</a>
         </div>
 
-        <div onclick="dropdownPenjadwalan()" class="menu-item">
+        <a class="menu-item" data-bs-toggle="collapse" href="#menu_penjadwalan" role="button" aria-expanded="false"
+            data-target="#menu_penjadwalan">
             <i class="bi bi-calendar-event"></i> Penjadwalan
-            <div class="arrow">
-                <i class="bi bi-chevron-down" id="arrow_menu"></i>
-            </div>
+            <i class="bi bi-chevron-down ms-auto rotate" id="arrow_penjadwalan"></i>
+        </a>
+        <div class="collapse" id="menu_penjadwalan">
+            <a href="#" class="menu-sub-item">Jadwal Saya</a>
         </div>
 
         <a href="/logout" class="menu-item"><i class="bi bi-box-arrow-right"></i> Keluar Akun</a>
     </div>
-
+    <!-- 
     <div class="content" id="content">
-        {{-- <div class="navbar"> --}}
         <i class="bi bi-list toggle-btn" id="toggleSidebar"></i>
-        {{-- </div> --}}
-        <div class="container ">
-            @yield('content')
-        </div>
-    </div>
+    </div> -->
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById("toggleSidebar").addEventListener("click", function() {
-            document.getElementById("sidebar").classList.toggle("sidebar-hidden");
-            document.getElementById("content").classList.toggle("content-expanded");
+            document.getElementById("sidebar").classList.toggle("d-none");
         });
 
-        function dropdownVote() {
-            document.getElementById("menu_vote").classList.toggle("hidden");
-            document.querySelector("#arrow_menu").classList.toggle("rotate-180");
-        }
-    </script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".menu-item[data-bs-toggle='collapse']").forEach(function(item) {
+                let arrow = item.querySelector(".rotate");
+                let target = document.querySelector(item.dataset.target);
 
+                target.addEventListener("show.bs.collapse", function() {
+                    arrow.classList.add("open");
+                });
+m
+                target.addEventListener("hide.bs.collapse", function() {
+                    arrow.classList.remove("open");
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
